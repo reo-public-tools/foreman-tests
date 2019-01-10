@@ -39,19 +39,18 @@ for an openstack install.
     existing provisioning info. 
 
 
+We are going to test out just he rpc-o and rpc-r on ironic nodes along with ironic-on-ironic to begin with. This layout should 
+make it really easy to start expanding into mixed environmets to include VMs and scalable simulated(mnaio) style setups in the 
+future though.
+
+
 
 ## Foreman Installation Steps(single node AIO)
 
 [Setting up a Foreman AIO with the Katello Plugin](./install_foreman/README.md)
 
-## Learning process
 
-I'm not sure how far I can get with this. I will use this area to document the testing to start out with, which will hopefully
-evolve into something better as I go. At this point I have played around with the install and tested out the openstack connectivity.
-I will break this down into various subtasks and take notes on each as I go.
-
-
-### Creating a new Lab Environment
+## Creating a new Lab Environment
 
 To start out with, I'm just setting up the environment to use for testing. This will
 involve setting up a lab org, location and user.  We will have an option of using vlans
@@ -61,7 +60,7 @@ to use vxlans with auto-generated network info.
 [Creating a new Environment](./setup_lab_environment/README.md)
 
 
-### Test some python code out using the api to "check out" vlan networks
+## Test some python code out using the api to "check out" vlan networks
 
 We will need the ability to check out pre defined vlan network groups for labs. These will
 be presented as subnet objects under a domain object set up for each vlan group. In this test
@@ -74,30 +73,12 @@ We have two parameters tied to the domain.
 
 
 
+## Generate and save vxlan domains and subnets(TODO).
 
-### Generate and save vxlan domains and subnets(TODO).
+We have a limited amount of vlans trunked down to the environment. Vxlans allow us to 
+set up the same layout without requiring netsec or dcops intervention. Since the domain
+object doesn't exist, we will need to create it along with generating the associated 
+subnets.  We can store vxlan info within the subnets for each. The multicast group info
+can be stored with the domain at a higher level. 
 
-Most of these environments can be on a shared flat network.  We can use a random multicast group and vxlan range to seperate out
-the needed openstack networks. Some info needed is.
-
-* Random multicast group
-* Random vxlan base id. We will increment and assign to each of the networks needed.
-  * host/provision network: Provided from the existing flat network during provision. Also for the external haproxy floating ip.
-  * management/container network:  Used for control plane management and communictions. Also the internal haproxy floating ip.
-  * vlan network: Tenant neutron vlan networks
-  * vxlan network: Tenant neutron private networks.
-  * storage network: ceph, cinder backend communications.
-  * lbaas network: octavia
-  * ironic network: ironic python agent and provisioning
-  * ipmi network: ironic out of band ipmi provisioning.
-  * a random id for haproxy(better if managed) to keep keepalived from conflicting with other clusters.
-
-With foreman we can create subnets and save some metadata for each of these.  We will probably want to save the multicast info somewhere
-at a higher scope, such as the environment, location...  We will need all of this information to configure the vxlan(or vlan) interfaces
-, bridges, ip addresses and static routes needed to be setup before openstack is installed.  We will also need all of this info to be
-available to do some auto-configuration of things like openstack-ansible, redhat osp, or whatever openstack deployment system you are
-working with. We should be able to set this up in such a way that the subnets will get assocaited to hosts and handle all of the
-ip management for us.  The dhcp smart proxy also has an infoblox plugin to assist with changes made with the openstack installer after. 
-
-
-
+[Working with dynamic vxlan groups](./dynamic_vxlan_tests/README.md)
