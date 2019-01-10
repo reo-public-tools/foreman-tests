@@ -1,18 +1,6 @@
 # Checking that we can check in/out vlan domains
 
-## Install python-foreman(python-foreman was a bucket of fail, going with direct api calls)
-
-* https://pythonhosted.org/python-foreman/
-
-```bash
-yum groupinstall -y "Development Tools"
-yum -y install python-virtualenv.noarch
-virtualenv /root/foreman-tests-venv
-. /root/foreman-tests-venv/bin/activate
-pip install python-foreman
-```
-
-## Test the scripts to check out and release a domain
+## Test the api scripts to check out and release a domain
 
 ### Testing the check out actions
 ```bash
