@@ -82,3 +82,55 @@ subnets.  We can store vxlan info within the subnets for each. The multicast gro
 can be stored with the domain at a higher level. 
 
 [Working with dynamic vxlan groups](./dynamic_vxlan_tests/README.md)
+
+
+## Allocate floating ip addresses for external and internal(TODO):
+
+Whatever code handles the overall lab setup, it will need to pull an ip from the management
+network and allocate a port or floating ip from the base 'ironic' network. We will need
+to track these somewhere global to the environment.  Domain attributes will probably be
+the best place.
+
+[Tracking external and internal lb floaters](./track_floaters/README.md)
+
+
+## Look into ironic-on-ironic checkout(TODO)
+
+ironic-on-ironic will allow us to use our existing baremetal to allocate OSP overcloud
+nodes, or openstack-ansible ironic nodes for testing on the existing ironic infrastructure.
+
+May need to look into setting up host objects to account for each checked out ironic node with
+useful info for each.  When subnets are assigned to hosts, foreman will pull a free ip from
+the subnet for each if needed.  This can be used to auto-generate the OSP network templates
+with pre-defined ip addresses for the overcloud later on.  It can also be used for the 
+ironic node registration steps as well for both OSP and openstack-ansible style setups.
+
+[Checking out ironic nodes for ironic-on-ironic](./ironic_on_ironic/README.md)
+
+
+## Look into method to build out hosts while configurting networking and disk(TODO)
+
+We can either test out using foreman's compute plugin to start building out the environment, or
+run it externally.  Here we can look at making sure the host objects get created under a domain.
+From there we can use either ansible or puppet to use all of the data in foreman to configure
+networking and disks to prepare for openstack installs. This might involve setting up the ansible
+plugin and using the public ansible dynamic inventory script for foreman. 
+
+[Build and Configure the ENV](./build_and_configure/README.md)
+
+
+## Look into using the same dynamic inventory script to configure for openstack(TODO)
+
+We already have some config-automation scripts tested in other envs.  Foreman should have all the
+info we need at this point to auto-configure the environment.  
+
+[Auto-Configure Openstack Deploy](./auto_configure/README.md)
+
+
+## Stopping point
+
+We are stopping here as we should have an env ready for either an OSP or openstack-ansible deploy.
+They each have their own way of deployment.  The steps here will probably be external to foreman.
+
+
+
