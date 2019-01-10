@@ -110,7 +110,7 @@ ironic node registration steps as well for both OSP and openstack-ansible style 
 [Checking out ironic nodes for ironic-on-ironic](./ironic_on_ironic/README.md)
 
 
-## Look into method to build out hosts while configurting networking and disk(TODO)
+## Look into method to build out hosts including networking and disk(TODO)
 
 We can either test out using foreman's compute plugin to start building out the environment, or
 run it externally.  Here we can look at making sure the host objects get created under a domain.
@@ -121,7 +121,7 @@ plugin and using the public ansible dynamic inventory script for foreman.
 [Build and Configure the ENV](./build_and_configure/README.md)
 
 
-## Look into using the same dynamic inventory script to configure for openstack(TODO)
+## Look into openstack auto-configuration using foreman data(TODO)
 
 We already have some config-automation scripts tested in other envs.  Foreman should have all the
 info we need at this point to auto-configure the environment.  
