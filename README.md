@@ -36,7 +36,7 @@ for an openstack install.
   * After provisioning, the foreman db already has all your host data, network info, facts, metadata and other scoped variables
     available.
   * The api or ansible plugins can be used to do auto configuration of your openstack deployment system(osa, osp...) using 
-    existing provisioning info.
+    existing provisioning info. 
 
 
 
@@ -53,9 +53,26 @@ I will break this down into various subtasks and take notes on each as I go.
 
 ### Creating a new Lab Environment
 
-Just going to start with a simple config file and a python script to utilize the foreman api to configure a new temporary environment.
+To start out with, I'm just setting up the environment to use for testing. This will
+involve setting up a lab org, location and user.  We will have an option of using vlans
+already trunked down to the ironic nodes for things requiring network performance, or 
+to use vxlans with auto-generated network info. 
 
-[Creating a new Environment](./create_environment/README.md)
+[Creating a new Environment](./setup_lab_environment/README.md)
+
+
+### Test some python code out using the api to "check out" vlan networks
+
+We will need the ability to check out pre defined vlan network groups for labs. These will
+be presented as subnet objects under a domain object set up for each vlan group. In this test
+We have two parameters tied to the domain.
+
+* type(vlan or vxlan): Track if its a static vlan or dynamic vxlan network layout.
+* in-use(yes or no): Just a simple var to track if the domain is in use or not.
+
+[Working with static VLAN groups](./static_vlan_tests/README.md)
+
+
 
 
 ### Generate and save vxlan info.
