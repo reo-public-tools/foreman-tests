@@ -72,9 +72,7 @@ We have two parameters tied to the domain.
 * in-use(yes or no): Just a simple var to track if the domain is in use or not.
 
 [Working with static VLAN groups](./static_vlan_tests/README.md)<br>
-
 [check_out_vlan_domain.py](./static_vlan_tests/check_out_vlan_domain.py)<br>
-
 [release_vlan_domain.py](./static_vlan_tests/release_vlan_domain.py)<br>
 
 
