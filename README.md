@@ -75,7 +75,7 @@ We have two parameters tied to the domain.
 
 
 
-### Generate and save vxlan info.
+### Generate and save vxlan domains and subnets(TODO).
 
 Most of these environments can be on a shared flat network.  We can use a random multicast group and vxlan range to seperate out
 the needed openstack networks. Some info needed is.
@@ -99,6 +99,5 @@ available to do some auto-configuration of things like openstack-ansible, redhat
 working with. We should be able to set this up in such a way that the subnets will get assocaited to hosts and handle all of the
 ip management for us.  The dhcp smart proxy also has an infoblox plugin to assist with changes made with the openstack installer after. 
 
-This is a good starting point.  I will make additional nodes as I go along and start testing things out.
 
 
