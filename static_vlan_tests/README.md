@@ -42,7 +42,7 @@ Domain lab1.phobos.rpc.rackspace.com is either the wrong type or in use
 Password: 
 Found domain: id: 2 name: lab1.phobos.rpc.rackspace.com fullname: LAB1 Static Domain
 Domain lab1.phobos.rpc.rackspace.com is of type vlan
-Domain lab1.phobos.rpc.rackspace.com is free to check out
+Domain lab1.phobos.rpc.rackspace.com is in use and can be released
 
 Domain: lab1.phobos.rpc.rackspace.com(LAB1 Static Domain)
 	Org: Lab Organization => Lab Organization
@@ -60,11 +60,12 @@ Domain: lab1.phobos.rpc.rackspace.com(LAB1 Static Domain)
 		network: 172.20.88.0/22       name: LAB1-GW-NET          desc: LAB1 gateway net network with static VLANs
 
 
+
 [root@lab-deploy01 static_vlan_tests]# ./release_vlan_domain.py 
 Password: 
 Found domain: id: 2 name: lab1.phobos.rpc.rackspace.com fullname: LAB1 Static Domain
 Domain lab1.phobos.rpc.rackspace.com is free to use
 Domain lab1.phobos.rpc.rackspace.com is of type vlan
 Domain lab1.phobos.rpc.rackspace.com is already released
-
 ```
+

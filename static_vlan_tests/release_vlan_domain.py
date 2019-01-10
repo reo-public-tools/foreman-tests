@@ -121,7 +121,7 @@ def main():
     # Check the results
     if is_free_for_use == 0 and is_type_vlan == 1:
       # We have a winner, lets release it
-      print "Domain %s is free to check out" % domain['name']
+      print "Domain %s is in use and can be released" % domain['name']
 
       # Check out the domain and print the domain info
       release_domain(foreman_api, username, password, domain['id'])
