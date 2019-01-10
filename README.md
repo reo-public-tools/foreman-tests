@@ -1,5 +1,7 @@
-# openstack-provision
-Tools to automate and provision devices for various openstack installation tools
+# Openstack in Opestack lab component testing
+
+This is mainly for helping openstack developers build environments within an existing openstack
+environment using ironic. This repo is temporary for testing some basic functionality. 
 
 
 ## Overview
