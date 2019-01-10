@@ -71,9 +71,11 @@ We have two parameters tied to the domain.
 * type(vlan or vxlan): Track if its a static vlan or dynamic vxlan network layout.
 * in-use(yes or no): Just a simple var to track if the domain is in use or not.
 
-[Working with static VLAN groups](./static_vlan_tests/README.md)
-[check_out_vlan_domain.py](./static_vlan_tests/check_out_vlan_domain.py)
-[release_vlan_domain.py](./static_vlan_tests/release_vlan_domain.py)
+[Working with static VLAN groups](./static_vlan_tests/README.md)<br>
+
+[check_out_vlan_domain.py](./static_vlan_tests/check_out_vlan_domain.py)<br>
+
+[release_vlan_domain.py](./static_vlan_tests/release_vlan_domain.py)<br>
 
 
 
