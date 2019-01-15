@@ -328,6 +328,18 @@ class foremanAction:
 
         return r.json()
 
+    def get_subnet_details(self, subnet_id):
+        """ Get the details of a single subnet """
+
+        newreq = requests.Request('GET',
+                                  "{}/subnets/{}".format(self.endpoint,
+                                                         subnet_id),
+                                  headers=self.headers)
+        prepped_req = newreq.prepare()
+
+        r = self.do_request('foremanAction.get_domain_details', prepped_req)
+        return r.json()
+
     def create_vxlan_subnets(self, domaininfo):
         """
         Go through the vxlan networks and create a subnet for each.

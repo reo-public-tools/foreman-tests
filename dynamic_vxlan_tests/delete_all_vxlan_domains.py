@@ -8,6 +8,7 @@ sys.path.append(os.path.abspath('../lib/'))
 
 import foremanAction
 
+
 def main():
 
     foreman_api = "https://lab-deploy01.localdomain/api"
@@ -20,7 +21,8 @@ def main():
     fa.set_organization('Lab Organization')
     fa.set_location('Lab Location')
 
-    # Lets parse through all the vxlan based domains and do some testing cleanup
+    # Lets parse through all the vxlan based
+    # domains and do some testing cleanup
     domains = fa.get_detailed_domain_list()
     for domain in domains:
 

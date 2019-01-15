@@ -8,7 +8,8 @@ sys.path.append(os.path.abspath('../lib/'))
 
 import foremanAction
 
-def print_domain_details(curdomaininfo):
+
+def print_domain_details(faobj, curdomaininfo):
 
     print "\nDomain: {}({})".format(curdomaininfo['name'],
                                     curdomaininfo['fullname'])
@@ -24,10 +25,20 @@ def print_domain_details(curdomaininfo):
                                               parameter['value'])
     print "\tSubnets:"
     for subnet in curdomaininfo['subnets']:
-        print "\t\tnetwork: {:20} name: {:20} desc: {:20}".format(
-            subnet['network_address'],
-            subnet['name'],
-            subnet['description'])
+        cursubnetinfo = faobj.get_subnet_details(subnet['id'])
+        print "\t\tname: {}".format(subnet['name'])
+        print "\t\t\tdesc: {}".format(subnet['description'])
+        print "\t\t\tnetwork: {}".format(subnet['network_address'])
+        print "\t\t\tgateway: {}".format(cursubnetinfo['gateway'])
+        print "\t\t\tmask: {}".format(cursubnetinfo['mask'])
+        print "\t\t\tcidr: {}".format(cursubnetinfo['cidr'])
+        print "\t\t\tboot_mode: {}".format(cursubnetinfo['boot_mode'])
+        print "\t\t\tnetwork_type: {}".format(cursubnetinfo['network_type'])
+        print "\t\t\tipam: {}".format(cursubnetinfo['ipam'])
+        for parameter in cursubnetinfo['parameters']:
+            print "\t\t\tparam: name: {} value: {}".format(parameter['name'],
+                                                           parameter['value'])
+
 
 def main():
 
@@ -43,7 +54,7 @@ def main():
 
     dominfo = fa.create_dynamic_lab()
 
-    print_domain_details(dominfo)
+    print_domain_details(fa, dominfo)
 
 if __name__ == '__main__':
     main()
