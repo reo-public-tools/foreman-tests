@@ -77,7 +77,7 @@ We have two parameters tied to the domain.
 
 
 
-## Generate and save vxlan domains and subnets(TODO).
+## Generate and save vxlan domains and subnets.
 
 We have a limited amount of vlans trunked down to the environment. Vxlans allow us to 
 set up the same layout without requiring netsec or dcops intervention. Since the domain
@@ -86,7 +86,8 @@ subnets.  We can store vxlan info within the subnets for each. The multicast gro
 can be stored with the domain at a higher level. 
 
 [Working with dynamic vxlan groups](./dynamic_vxlan_tests/README.md)
-
+[Creating a new vxlan domain with subnets](./dynamic_vxlan_tests/create_vxlan_domain.py)
+[Delete all vxlan domains and subnets](./dynamic_vxlan_tests/delete_all_vxlan_domains.py)
 
 ## Allocate floating ip addresses for external and internal(TODO):
 
