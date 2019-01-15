@@ -32,6 +32,8 @@ def print_domain_details(faobj, curdomaininfo):
         print "\t\t\tgateway: {}".format(cursubnetinfo['gateway'])
         print "\t\t\tmask: {}".format(cursubnetinfo['mask'])
         print "\t\t\tcidr: {}".format(cursubnetinfo['cidr'])
+        print "\t\t\tfrom: {} to: {}".format(cursubnetinfo['from'],
+                                             cursubnetinfo['to'])
         print "\t\t\tboot_mode: {}".format(cursubnetinfo['boot_mode'])
         print "\t\t\tnetwork_type: {}".format(cursubnetinfo['network_type'])
         print "\t\t\tipam: {}".format(cursubnetinfo['ipam'])

@@ -21,6 +21,9 @@ We are saving the multicast info at the domain object level and the vxlan info w
 should be available to both the config management solution for network and disk config.  It will eventually be available
 for the osa/osp config using something like an ansible dynamic inventory scripts.
 
+We are leaving the first 49 ips per network for any needed manual setup.  Ips 50 - 255 is used for forman ipam assignments
+so we can make it easier to set up the used ips with osa later on.
+
 ## Testing out vxlan domain and subnet creation
 ```bash
 # ./create_vxlan_domain.py 
@@ -31,7 +34,7 @@ Domain: lab2.phobos.rpc.rackspace.com(LAB2 Dynamic Domain)
 	Location: Lab Location => Lab Location
 	Parameters:
 		name: in-use value: yes
-		name: multicast-group value: 239.1.33.25
+		name: multicast-group value: 239.1.33.230
 		name: type value: vxlan
 	Subnets:
 		name: LAB2-MGMT
@@ -40,77 +43,84 @@ Domain: lab2.phobos.rpc.rackspace.com(LAB2 Dynamic Domain)
 			gateway: 172.22.0.1
 			mask: 255.255.252.0
 			cidr: 22
+			from: 172.22.0.50 to: 172.22.0.255
 			boot_mode: DHCP
 			network_type: IPv4
 			ipam: Internal DB
 			param: name: type value: vxlan
-			param: name: vxlan-id value: 15821418
+			param: name: vxlan-id value: 7713507
 		name: LAB2-STOR-MGMT
 			desc: None
 			network: 172.22.4.0/22
 			gateway: 172.22.4.1
 			mask: 255.255.252.0
 			cidr: 22
+			from: 172.22.4.50 to: 172.22.4.255
 			boot_mode: DHCP
 			network_type: IPv4
 			ipam: Internal DB
 			param: name: type value: vxlan
-			param: name: vxlan-id value: 15821419
+			param: name: vxlan-id value: 7713508
 		name: LAB2-STORAGE
 			desc: None
 			network: 172.22.8.0/22
 			gateway: 172.22.8.1
 			mask: 255.255.252.0
 			cidr: 22
+			from: 172.22.8.50 to: 172.22.8.255
 			boot_mode: DHCP
 			network_type: IPv4
 			ipam: Internal DB
 			param: name: type value: vxlan
-			param: name: vxlan-id value: 15821420
+			param: name: vxlan-id value: 7713509
 		name: LAB2-TENANT
 			desc: None
 			network: 172.22.12.0/22
 			gateway: 172.22.12.1
 			mask: 255.255.252.0
 			cidr: 22
+			from: 172.22.12.50 to: 172.22.12.255
 			boot_mode: DHCP
 			network_type: IPv4
 			ipam: Internal DB
 			param: name: type value: vxlan
-			param: name: vxlan-id value: 15821421
+			param: name: vxlan-id value: 7713510
 		name: LAB2-LBAAS
 			desc: None
 			network: 172.22.16.0/22
 			gateway: 172.22.16.1
 			mask: 255.255.252.0
 			cidr: 22
+			from: 172.22.16.50 to: 172.22.16.255
 			boot_mode: DHCP
 			network_type: IPv4
 			ipam: Internal DB
 			param: name: type value: vxlan
-			param: name: vxlan-id value: 15821422
+			param: name: vxlan-id value: 7713511
 		name: LAB2-INSIDE-NET
 			desc: None
 			network: 172.22.20.0/22
 			gateway: 172.22.20.1
 			mask: 255.255.252.0
 			cidr: 22
+			from: 172.22.20.50 to: 172.22.20.255
 			boot_mode: DHCP
 			network_type: IPv4
 			ipam: Internal DB
 			param: name: type value: vxlan
-			param: name: vxlan-id value: 15821423
+			param: name: vxlan-id value: 7713512
 		name: LAB2-GW-NET
 			desc: None
 			network: 172.22.24.0/22
 			gateway: 172.22.24.1
 			mask: 255.255.252.0
 			cidr: 22
+			from: 172.22.24.50 to: 172.22.24.255
 			boot_mode: DHCP
 			network_type: IPv4
 			ipam: Internal DB
 			param: name: type value: vxlan
-			param: name: vxlan-id value: 15821424
+			param: name: vxlan-id value: 7713513
 
 ```
 

@@ -356,11 +356,19 @@ class foremanAction:
 
         subnet_prefix = domaininfo['name'].split('.')[0].upper()
 
+        """
+        Lets reserve the first 50 for net equip and unknown. Lets
+        give the rest of the 1st /24 to lab hosts. We can then
+        make sure those are not used by osa for lxc containers
+        by adding a single entry to the used ips.
+        """
         curoffset = 0
         for network in self.vxlan_networks:
             netname = "{}-{}".format(subnet_prefix, network.upper())
             curnetwork = "{}.{}.0".format(self.vxlan_network_prefix, curoffset)
             curgateway = "{}.{}.1".format(self.vxlan_network_prefix, curoffset)
+            curfrom = "{}.{}.50".format(self.vxlan_network_prefix, curoffset)
+            curto = "{}.{}.255".format(self.vxlan_network_prefix, curoffset)
             curoffset += self.vxlan_third_octet_step
 
             """ Make requests to create the new dynamic vxlan domain """
@@ -374,6 +382,8 @@ class foremanAction:
                     'mask': self.vxlan_netmask,
                     'gateway': curgateway,
                     'ipam': 'Internal DB',
+                    'from': curfrom,
+                    'to': curto,
                     'boot-mode': 'Static',
                     'domain_ids': [domaininfo['id']],
                     'subnet_parameters_attributes': [
