@@ -25,6 +25,7 @@ class foremanAction:
       - Track the location id pulled on name set for api calls
       - Set up a multicast base ip(last octet uses for dynamic domains)
       - Set up the vxlan generation(netmask and step for 3rd octet must match)
+      - A list of networks to use for the dynamic vxlan subnets
     """
     session = requests.Session()
     endpoint = 'https://localhost/api'
@@ -47,6 +48,17 @@ class foremanAction:
     vxlan_network_prefix = '172.22'
     vxlan_netmask = '255.255.252.0'
     vxlan_third_octet_step = 4
+
+    """ We are not including the 'host' network as we are using ironic flat """
+    vxlan_networks = [
+        'mgmt',        # Standard management network for osa and osp
+        'stor-mgmt',   # Storage management used with osp
+        'storage',     # Standard storage network
+        'tenant',      # Tunnel for private neutron nets
+        'lbaas',       # Octavia management net
+        'inside-net',  # Shared neutron private net
+        'gw-net'       # Shared neutron external/gw net
+    ]
 
     def __init__(self, endpoint_url=None, curuser=None, curpass=None,
                  domain_name=None, domain_name_prefix=None,
@@ -315,3 +327,108 @@ class foremanAction:
                             prepped_req)
 
         return r.json()
+
+    def create_vxlan_subnets(self, domaininfo):
+        """
+        Go through the vxlan networks and create a subnet for each.
+        We will need a domain to attach these two for the dynamic lab.
+        """
+
+        """
+        When createing domains, we are checking the multicast group
+        against existing domains.  Lets pick a random vxlan id range
+        to reduce the chaces of issues if something externally is using
+        the same multicast group.
+        """
+        vxlan_id = random.randint(50000, 16000000)
+
+        subnet_prefix = domaininfo['name'].split('.')[0].upper()
+
+        curoffset = 0
+        for network in self.vxlan_networks:
+            netname = "{}-{}".format(subnet_prefix, network.upper())
+            curnetwork = "{}.{}.0".format(self.vxlan_network_prefix, curoffset)
+            curgateway = "{}.{}.1".format(self.vxlan_network_prefix, curoffset)
+            curoffset += self.vxlan_third_octet_step
+
+            """ Make requests to create the new dynamic vxlan domain """
+            data = {
+                'organization_id': self.organization_id,
+                'location_id': self.location_id,
+                'subnet': {
+                    'name': netname,
+                    'network_type': 'IPv4',
+                    'network': curnetwork,
+                    'mask': self.vxlan_netmask,
+                    'gateway': curgateway,
+                    'ipam': 'Internal DB',
+                    'boot-mode': 'Static',
+                    'domain_ids': [domaininfo['id']],
+                    'subnet_parameters_attributes': [
+                        {'name': 'type', 'value': 'vxlan'},
+                        {'name': 'vxlan-id', 'value': vxlan_id},
+                    ]
+                }
+            }
+            newreq = requests.Request('POST',
+                                      "{}/subnets".format(self.endpoint),
+                                      data=json.dumps(data),
+                                      headers=self.headers)
+            prepped_req = newreq.prepare()
+
+            r = self.do_request('foremanAction.create_vxlan_subnets',
+                                prepped_req)
+
+            """ Make sure to increase the vxlan id with each network """
+            vxlan_id += 1
+
+    def delete_vxlan_subnets(self, domain_name):
+        """ Delete subnets based on domain details """
+
+        domaindetails = self.get_domain_details(domain_name)
+        for subnet in domaindetails['subnets']:
+
+            """ Free up domain associations """
+            data = '{"subnet": {"domain_ids": []}}'
+
+            newreq = requests.Request('PUT',
+                                      "{}/subnets/{}".format(
+                                          self.endpoint,
+                                          subnet['id']),
+                                      data=data,
+                                      headers=self.headers)
+            prepped_req = newreq.prepare()
+
+            r = self.do_request('foremanAction.delete_vxlan_subnets',
+                                prepped_req)
+
+            """ Do the deletion """
+            newreq = requests.Request('DELETE',
+                                      "{}/subnets/{}".format(self.endpoint,
+                                                             subnet['id']),
+                                      headers=self.headers)
+            prepped_req = newreq.prepare()
+
+            r = self.do_request('foremanAction.delete_vxlan_subnets',
+                                prepped_req)
+
+    def create_dynamic_lab(self):
+        """
+        Wrapper to create both the domain and subnets for a new
+        dynamic lab environment.
+        """
+
+        domaininfo = self.create_dynamic_lab_domain()
+
+        self.create_vxlan_subnets(domaininfo)
+
+        return self.get_domain_details(domaininfo['name'])
+
+    def delete_dynamic_lab(self, domain_name):
+        """
+        Wrapper to delete both the subnets and domain for an
+        existing dynamic lab environment.
+        """
+
+        self.delete_vxlan_subnets(domain_name)
+        self.delete_dynamic_lab_domain(domain_name)
