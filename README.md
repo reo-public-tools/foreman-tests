@@ -85,9 +85,9 @@ object doesn't exist, we will need to create it along with generating the associ
 subnets.  We can store vxlan info within the subnets for each. The multicast group info
 can be stored with the domain at a higher level. 
 
-[Working with dynamic vxlan groups](./dynamic_vxlan_tests/README.md)
-[Creating a new vxlan domain with subnets](./dynamic_vxlan_tests/create_vxlan_domain.py)
-[Delete all vxlan domains and subnets](./dynamic_vxlan_tests/delete_all_vxlan_domains.py)
+[Working with dynamic vxlan groups](./dynamic_vxlan_tests/README.md)<br>
+[Creating a new vxlan domain with subnets](./dynamic_vxlan_tests/create_vxlan_domain.py)<br>
+[Delete all vxlan domains and subnets](./dynamic_vxlan_tests/delete_all_vxlan_domains.py)<br>
 
 ## Allocate floating ip addresses for external and internal(TODO):
 

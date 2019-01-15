@@ -21,7 +21,7 @@ We are saving the multicast info at the domain object level and the vxlan info w
 should be available to both the config management solution for network and disk config.  It will eventually be available
 for the osa/osp config using something like an ansible dynamic inventory scripts.
 
-### Testing out vxlan domain and subnet creation
+## Testing out vxlan domain and subnet creation
 ```bash
 # ./create_vxlan_domain.py 
 Password: 
@@ -115,7 +115,7 @@ Domain: lab2.phobos.rpc.rackspace.com(LAB2 Dynamic Domain)
 ```
 
 
-### Cleanup all vxlan domains created for testing
+## Cleanup all vxlan domains created for testing
 ```bash
  ./delete_all_vxlan_domains.py 
 Password: 
