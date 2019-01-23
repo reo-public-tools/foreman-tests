@@ -97,7 +97,7 @@ to track these somewhere global to the environment.  Domain attributes will prob
 the best place.
 
 [Tracking external and internal lb floaters](./track_floaters/README.md)<br>
-[Creating new vxlan domain, subnets and external floater](./create_domain_with_external_vip.py)<br>
+[Creating new vxlan domain, subnets and floaters](./create_domain_with_vips.py)<br>
 [Delete vxlan domains, subnets and floaters](./delete_all_domains_and_vips.py)<br>
 
 
