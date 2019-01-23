@@ -89,7 +89,7 @@ can be stored with the domain at a higher level.
 [Creating a new vxlan domain with subnets](./dynamic_vxlan_tests/create_vxlan_domain.py)<br>
 [Delete all vxlan domains and subnets](./dynamic_vxlan_tests/delete_all_vxlan_domains.py)<br>
 
-## Allocate floating ip addresses for external and internal(TODO):
+## Allocate floating ip addresses for external and internal:
 
 Whatever code handles the overall lab setup, it will need to pull an ip from the management
 network and allocate a port or floating ip from the base 'ironic' network. We will need
@@ -97,6 +97,8 @@ to track these somewhere global to the environment.  Domain attributes will prob
 the best place.
 
 [Tracking external and internal lb floaters](./track_floaters/README.md)
+[Creating new vxlan domain, subnets and external floater](./create_domain_with_external_vip.py)
+[Delete vxlan domains, subnets and floaters](./delete_all_domains_and_vips.py)
 
 
 ## Look into ironic-on-ironic checkout(TODO)
@@ -112,6 +114,8 @@ ironic node registration steps as well for both OSP and openstack-ansible style 
 
 [Checking out ironic nodes for ironic-on-ironic](./ironic_on_ironic/README.md)
 
+
+## Look into allocating external/internal keepalived vids for haproxy(TODO)
 
 ## Look into method to build out hosts including networking and disk(TODO)
 
