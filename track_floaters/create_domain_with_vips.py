@@ -110,10 +110,5 @@ def main():
     print_domain_details(fa, dominfo)
 
 
-    #fa.delete_external_floating_ip(dominfo['id'])
-    #dominfo = fa.get_domain_details(dominfo['id'])
-
-    #print_domain_details(fa, dominfo)
-
 if __name__ == '__main__':
     main()
