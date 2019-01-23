@@ -96,9 +96,9 @@ network and allocate a port or floating ip from the base 'ironic' network. We wi
 to track these somewhere global to the environment.  Domain attributes will probably be
 the best place.
 
-[Tracking external and internal lb floaters](./track_floaters/README.md)
-[Creating new vxlan domain, subnets and external floater](./create_domain_with_external_vip.py)
-[Delete vxlan domains, subnets and floaters](./delete_all_domains_and_vips.py)
+[Tracking external and internal lb floaters](./track_floaters/README.md)<br>
+[Creating new vxlan domain, subnets and external floater](./create_domain_with_external_vip.py)<br>
+[Delete vxlan domains, subnets and floaters](./delete_all_domains_and_vips.py)<br>
 
 
 ## Look into ironic-on-ironic checkout(TODO)
