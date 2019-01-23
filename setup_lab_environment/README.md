@@ -111,3 +111,43 @@ ID | NAME            | NETWORK ADDR | NETWORK PREFIX | NETWORK MASK  | VLAN ID |
 
 ```
 
+
+### Allocate a floating ip from the management work
+
+We are picking .10 from the 0-50 range left for manual use. It can be anything that you
+are not expecting to be used by hosts or containers in the future build steps. So I'm 
+setting a internal_floating_ip paramter on the domain to hold it. The external will need
+to be a floater generated from openstack's ironic network. When ironic nodes are being spun
+up they will pull from the same networks, so the floater will be tied to the primary interface
+later on with either keepalived(osa) or pacemaker(osp).
+
+```bash
+hammer domain set-parameter --domain "lab1.phobos.rpc.rackspace.com" --name "internal_floating_ip" --value "172.20.68.10"
+```
+
+
+## Set up openstack lab project
+
+```bash
+openstack domain create --description "Shared LAB Domain" --enable labs-domain
+
+openstack project create --description "Shared LAB Project" --domain labs-domain labs-project
+
+openstack user create --domain labs-domain --project labs-project --password-prompt --description 'LABS Domain Admin User' --enable labs-admin
+
+openstack role add --project labs-project --user-domain labs-domain --user labs-admin admin
+openstack role add --domain labs-domain --user-domain labs-domain --user labs-admin admin
+
+openstack quota set --ram='-1' --instances=100 --cores='-1' --floating-ips=1 --gigabytes='-1' labs-project
+
+openstack project list --domain labs-domain
+
+neutron security-group-list --tenant_id <project id>
+
+(find the default)
+
+neutron security-group-rule-create --protocol icmp --direction ingress <project default security group id>
+neutron security-group-rule-create --protocol tcp --port-range-min 1 --port-range-max 65535 --direction ingress <project default security group id>
+neutron security-group-rule-create --protocol udp --port-range-min 1 --port-range-max 65535 --direction ingress <project default security group id>
+
+```

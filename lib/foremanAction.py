@@ -2,6 +2,9 @@ import sys
 import json
 import random
 import requests
+import urllib3
+
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
 class foremanAction:
@@ -25,9 +28,11 @@ class foremanAction:
       - Track the location id pulled on name set for api calls
       - Set up a multicast base ip(last octet uses for dynamic domains)
       - Set up the vxlan generation(netmask and step for 3rd octet must match)
+      - Default for internal floating ip usage for the last octet
       - A list of networks to use for the dynamic vxlan subnets
     """
     session = requests.Session()
+    session.verify = False
     endpoint = 'https://localhost/api'
     headers = {
         'Accept': 'version=2,application/json',
@@ -198,36 +203,78 @@ class foremanAction:
 
         return ret_domains
 
+    def delete_domain_parameter(self, domain_id, p_name):
+        """ Delete a parameter for a domain """
+
+        """ Check if existing so we know to update or create """
+        curdomaininfo = self.get_domain_details(domain_id)
+        p_exists = 0
+        for parameter in curdomaininfo['parameters']:
+            if parameter['name'] == p_name:
+                p_exists = 1
+                break
+
+        if p_exists == 1:
+
+            newreq = requests.Request('DELETE',
+                                      "{}/domains/{}/parameters/{}".format(
+                                          self.endpoint,
+                                          domain_id,
+                                          p_name),
+                                      headers=self.headers)
+
+            prepped_req = newreq.prepare()
+
+            r = self.do_request('foremanAction.delete_domain_parameter',
+                                prepped_req)
+
+    def set_domain_parameter(self, domain_id, p_name, p_value):
+        """ Set a parameter for a domain """
+
+        """ Check if existing so we know to update or create """
+        curdomaininfo = self.get_domain_details(domain_id)
+        p_exists = 0
+        for parameter in curdomaininfo['parameters']:
+            if parameter['name'] == p_name:
+                p_exists = 1
+                break
+
+        if p_exists == 0:
+
+            data = '{{"parameter": {{"name": "{}", "value": "{}"}}}}'.format(
+                p_name, p_value)
+
+            newreq = requests.Request('POST',
+                                      "{}/domains/{}/parameters".format(
+                                          self.endpoint,
+                                          domain_id),
+                                      data=data,
+                                      headers=self.headers)
+        else:
+            data = '{{"value": "{}"}}'.format(p_value)
+
+            newreq = requests.Request('PUT',
+                                      "{}/domains/{}/parameters/{}".format(
+                                          self.endpoint,
+                                          domain_id,
+                                          p_name),
+                                      data=data,
+                                      headers=self.headers)
+
+        prepped_req = newreq.prepare()
+
+        r = self.do_request('foremanAction.set_domain_parameter', prepped_req)
+        return r.json()
+
     def check_out_domain(self, domain_id):
         """ Check out a domain for use by setting the in-use param to 'yes' """
 
-        data = '{"value": "yes"}'
-
-        newreq = requests.Request('PUT',
-                                  "{}/domains/{}/parameters/in-use".format(
-                                      self.endpoint,
-                                      domain_id),
-                                  data=data,
-                                  headers=self.headers)
-        prepped_req = newreq.prepare()
-
-        r = self.do_request('foremanAction.get_domains', prepped_req)
-        return r.json()
+        return self.set_domain_parameter(domain_id, 'in-use', 'yes')
 
     def release_domain(self, domain_id):
         """ Release used domain by setting the in-use param to 'no'. """
 
-        data = '{"value": "no"}'
-
-        newreq = requests.Request('PUT',
-                                  "{}/domains/{}/parameters/in-use".format(
-                                      self.endpoint,
-                                      domain_id),
-                                  data=data,
-                                  headers=self.headers)
-        prepped_req = newreq.prepare()
-
-        r = self.do_request('foremanAction.get_domains', prepped_req)
+        return self.set_domain_parameter(domain_id, 'in-use', 'no')
 
     def find_available_lab_slot(self):
         """ Find a free domain slot for a dynamic(vxlan) based lab """
@@ -434,6 +481,45 @@ class foremanAction:
             r = self.do_request('foremanAction.delete_vxlan_subnets',
                                 prepped_req)
 
+    def assign_internal_floating_ip(self,
+                                    domain_name,
+                                    net_suffix='MGMT',
+                                    network_offset=10,
+                                    override_ip=None):
+        """
+        Set the internal_floating_ip on a domain.  Normally this
+        will come from the management network.  As we are naming
+        our subnets LAB(X)-(TYPE), I'm setting the match to MGMT
+        as the default.  We will just take the network add the
+        network_offset to find it. We will also allow an override
+        just in case.
+        """
+
+        """ Figure out the floating ip if needed """
+        internal_floating_ip = None
+        domain_id = None
+        if override_ip:
+            internal_floating_ip = override_ip
+        else:
+            domaindetails = self.get_domain_details(domain_name)
+            domain_id = domaindetails['id']
+            net_prefix = "{}-".format(
+                domaindetails['name'].split('.', 1)[0].upper())
+            subnet_name = "{}{}".format(net_prefix, net_suffix)
+
+            for subnet in domaindetails['subnets']:
+                if subnet['name'] == subnet_name:
+                    net_part = subnet['network_address'].split('/')[0]
+                    octlist = net_part.split('.')
+                    netstart = str.join('.', octlist[0:3])
+                    netend = int(octlist[3]) + network_offset
+                    internal_floating_ip = "{}.{}".format(netstart, netend)
+
+        """ Set the domain parameter """
+        self.set_domain_parameter(domain_id,
+                                  'internal_floating_ip',
+                                  internal_floating_ip)
+
     def create_dynamic_lab(self):
         """
         Wrapper to create both the domain and subnets for a new
@@ -443,6 +529,8 @@ class foremanAction:
         domaininfo = self.create_dynamic_lab_domain()
 
         self.create_vxlan_subnets(domaininfo)
+
+        self.assign_internal_floating_ip(domaininfo['name'])
 
         return self.get_domain_details(domaininfo['name'])
 
@@ -454,3 +542,13 @@ class foremanAction:
 
         self.delete_vxlan_subnets(domain_name)
         self.delete_dynamic_lab_domain(domain_name)
+
+    def set_external_floating_ip(self, domain_id, ip):
+        """ Wrapper to set the external_floating_ip in the domain params """
+
+        return self.set_domain_parameter(domain_id, 'external_floating_ip', ip)
+
+    def delete_external_floating_ip(self, domain_id):
+        """ Wrapper to delete the external_floating_ip in the domain params """
+
+        return self.delete_domain_parameter(domain_id, 'external_floating_ip')
