@@ -106,13 +106,8 @@ the best place.
 ironic-on-ironic will allow us to use our existing baremetal to allocate OSP overcloud
 nodes, or openstack-ansible ironic nodes for testing on the existing ironic infrastructure.
 
-May need to look into setting up host objects to account for each checked out ironic node with
-useful info for each.  When subnets are assigned to hosts, foreman will pull a free ip from
-the subnet for each if needed.  This can be used to auto-generate the OSP network templates
-with pre-defined ip addresses for the overcloud later on.  It can also be used for the 
-ironic node registration steps as well for both OSP and openstack-ansible style setups.
-
-[Checking out ironic nodes for ironic-on-ironic](./ironic_on_ironic/README.md)
+[Checking out ironic nodes for ironic-on-ironic](./ironic_on_ironic/README.md)<br>
+[Ironic-on-ironic Test](./ironic_on_ironic/test.py)<br>
 
 
 ## Look into allocating external/internal keepalived vids for haproxy(TODO)
