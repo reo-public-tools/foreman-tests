@@ -1,5 +1,6 @@
 import sys
 import json
+import base64
 import random
 import requests
 import urllib3
@@ -176,6 +177,13 @@ class foremanAction:
     def get_domain_details(self, domain_id):
         """ Get the details of a single domain """
 
+        """ Convert to id if needed """
+        if not str(domain_id).isdigit():
+            domains = self.get_domains()
+            for domain in domains:
+                if domain['name'] == domain_id:
+                    domain_id = domain['id']
+
         newreq = requests.Request('GET',
                                   "{}/domains/{}".format(self.endpoint,
                                                          domain_id),
@@ -203,11 +211,28 @@ class foremanAction:
 
         return ret_domains
 
+    def get_domain_parameter(self, domain_id, p_name):
+        """ Get a parameter for a domain """
+
+        """ Check if existing so we know to update or create """
+        curdomaininfo = self.get_domain_details(domain_id)
+        ret_data = ''
+        for parameter in curdomaininfo['parameters']:
+            if parameter['name'] == p_name:
+                ret_data = parameter['value']
+                break
+
+        return ret_data
+
     def delete_domain_parameter(self, domain_id, p_name):
         """ Delete a parameter for a domain """
 
         """ Check if existing so we know to update or create """
         curdomaininfo = self.get_domain_details(domain_id)
+
+        """ Reset the domain_id(if set to name and converted) """
+        domain_id = curdomaininfo['id']
+
         p_exists = 0
         for parameter in curdomaininfo['parameters']:
             if parameter['name'] == p_name:
@@ -233,6 +258,10 @@ class foremanAction:
 
         """ Check if existing so we know to update or create """
         curdomaininfo = self.get_domain_details(domain_id)
+
+        """ Reset the domain_id(if set to name and converted) """
+        domain_id = curdomaininfo['id']
+
         p_exists = 0
         for parameter in curdomaininfo['parameters']:
             if parameter['name'] == p_name:
@@ -243,6 +272,8 @@ class foremanAction:
 
             data = '{{"parameter": {{"name": "{}", "value": "{}"}}}}'.format(
                 p_name, p_value)
+
+            print data
 
             newreq = requests.Request('POST',
                                       "{}/domains/{}/parameters".format(
@@ -384,7 +415,7 @@ class foremanAction:
                                   headers=self.headers)
         prepped_req = newreq.prepare()
 
-        r = self.do_request('foremanAction.get_domain_details', prepped_req)
+        r = self.do_request('foremanAction.get_subnet_details', prepped_req)
         return r.json()
 
     def create_vxlan_subnets(self, domaininfo):
@@ -552,3 +583,20 @@ class foremanAction:
         """ Wrapper to delete the external_floating_ip in the domain params """
 
         return self.delete_domain_parameter(domain_id, 'external_floating_ip')
+
+    def set_ironic_on_ironic_data(self, domain_id, ioi_data):
+        """ Wrapper to set the ioi_data param in the domain params """
+
+        post_data = base64.b64encode(ioi_data)
+        return self.set_domain_parameter(domain_id, 'ioi_data', post_data)
+
+    def delete_ironic_on_ironic_data(self, domain_id):
+        """ Wrapper to delete the ioi_data in the domain params """
+
+        return self.delete_domain_parameter(domain_id, 'ioi_data')
+
+    def get_ironic_on_ironic_data(self, domain_id):
+        """ Wrapper to delete the ioi_data in the domain params """
+
+        return base64.b64decode(self.get_domain_parameter(domain_id,
+                                                          'ioi_data'))

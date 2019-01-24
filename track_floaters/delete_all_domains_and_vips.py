@@ -99,6 +99,8 @@ def main():
                 delete_neutron_port(neutron_network_name,
                                     domain['name'],
                                     parameter['value'])
+                print "Clearing external_floating_ip domain paramater"
+                fa.delete_external_floating_ip(domain['id'])
             if (parameter['name'] == 'type'
                     and parameter['value'] == 'vxlan'):
                 print "Deleting {}".format(domain['name'])
