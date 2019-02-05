@@ -110,7 +110,20 @@ nodes, or openstack-ansible ironic nodes for testing on the existing ironic infr
 [Ironic-on-ironic Test](./ironic_on_ironic/test.py)<br>
 
 
-## Look into allocating external/internal keepalived vids for haproxy(TODO)
+## Look into allocating external/internal keepalived vids for haproxy
+
+osa uses keepalived with haproxy for the external and internal floating vips. This
+requires unique virtual_router_ids for each VRRP. By default osa uses 10 and 11 for
+the ids on all clusters.  When we have multiple clusters on the same flat ironic 
+network we will need to make sure the external virtual router id is unique in each
+environment.  We will go ahead make the internal id unique as well just in case.
+
+[Creating a new vxlan domain w/vids](./track_vrids/create_vxlan_domain.py)<br>
+[Delete vxlan domains w/vids](./track_vrids/delete_all_vxlan_domains.py)<br>
+[Update static vlan domain params for vids](./track_vrids/test.py)<br>
+[VRID Test Info](./track_vrids/README.md)<br>
+
+
 
 ## Look into method to build out hosts including networking and disk(TODO)
 

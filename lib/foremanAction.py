@@ -273,8 +273,6 @@ class foremanAction:
             data = '{{"parameter": {{"name": "{}", "value": "{}"}}}}'.format(
                 p_name, p_value)
 
-            print data
-
             newreq = requests.Request('POST',
                                       "{}/domains/{}/parameters".format(
                                           self.endpoint,
@@ -356,6 +354,33 @@ class foremanAction:
 
         return mcgroup
 
+    def find_new_virtual_router_id(self, type):
+        """
+        Make sure we have a unique virtual router id. We will randomize and
+        compare against existing list from all domain entries.
+        """
+
+        """ Type will be 'external' or 'internal' """
+        key_name = "%s_virtual_router_id".format(type)
+        domain_list = self.get_detailed_domain_list()
+
+        free_for_use = 0
+        while free_for_use != 1:
+            randid = random.randint(1, 254)
+            free_for_use = 1
+            for domain in domain_list:
+                if domain['parameters'] == []:
+                    continue
+                for parameter in domain['parameters']:
+                    if (parameter['name'] == key_name
+                            and parameter['value'] != randid):
+                        continue
+                    if parameter['name'] == key_name:
+                        if parameter['value'] == randid:
+                            free_for_use = 0
+
+        return randid
+
     def create_dynamic_lab_domain(self):
         """ Create a new vxlan backed dynamic lab """
 
@@ -366,6 +391,10 @@ class foremanAction:
 
         """ Request an unused multicast group """
         multicast_group = self.find_new_multicast_group()
+
+        """ Request external and internal haproxy/keepalived router id """
+        external_vrid = self.find_new_virtual_router_id('external')
+        internal_vrid = self.find_new_virtual_router_id('internal')
 
         """ Make requests to create the new dynamic vxlan domain """
         data = {
@@ -378,6 +407,8 @@ class foremanAction:
                     {'name': 'type', 'value': 'vxlan'},
                     {'name': 'in-use', 'value': 'yes'},
                     {'name': 'multicast-group', 'value': multicast_group},
+                    {'name': 'external_vrid', 'value': external_vrid},
+                    {'name': 'internal_vrid', 'value': internal_vrid}
                 ],
             }
         }
@@ -573,6 +604,26 @@ class foremanAction:
 
         self.delete_vxlan_subnets(domain_name)
         self.delete_dynamic_lab_domain(domain_name)
+
+    def set_external_virtual_router_id(self, domain_id, id):
+        """ Wrapper to set the external_vrid in the domain params """
+
+        return self.set_domain_parameter(domain_id, 'external_vrid', id)
+
+    def delete_external_virtual_router_id(self, domain_id):
+        """ Wrapper to delete the external_vrid in the domain params """
+
+        return self.delete_domain_parameter(domain_id, 'external_vrid')
+
+    def set_internal_virtual_router_id(self, domain_id, id):
+        """ Wrapper to set the internal_vrid in the domain params """
+
+        return self.set_domain_parameter(domain_id, 'internal_vrid', id)
+
+    def delete_internal_virtual_router_id(self, domain_id):
+        """ Wrapper to delete the internal_vrid in the domain params """
+
+        return self.delete_domain_parameter(domain_id, 'internal_vrid')
 
     def set_external_floating_ip(self, domain_id, ip):
         """ Wrapper to set the external_floating_ip in the domain params """
