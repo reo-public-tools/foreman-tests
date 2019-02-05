@@ -101,7 +101,7 @@ the best place.
 [Delete vxlan domains, subnets and floaters](./track_floaters/delete_all_domains_and_vips.py)<br>
 
 
-## Look into ironic-on-ironic checkout(TODO)
+## Look into ironic-on-ironic checkout
 
 ironic-on-ironic will allow us to use our existing baremetal to allocate OSP overcloud
 nodes, or openstack-ansible ironic nodes for testing on the existing ironic infrastructure.
