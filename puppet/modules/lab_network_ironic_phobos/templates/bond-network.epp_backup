@@ -1,0 +1,17 @@
+[Match]
+Name=<%= $bond %>
+
+[Network]
+Bridge=br-vlan
+
+<% $foreman_subnets.each |$cursubnet| { %>
+  <% if $cursubnet['parameters']['type'] == 'vxlan' { %>
+VXLAN=<% $bond %>.vxlan<% $cursubnet['parameters']['vxlan-id'] %>
+  <% } elsif $cursubnet['parameters']['type'] == 'vlan' { %>
+VLAN=<% $bond %>.<% $cursubnet['vlanid'] %>
+  <% } %>
+<%= $cursubnet %>
+<% } %>
+
+{name => LAB2-TENANT, network => 172.22.12.0, mask => 255.255.252.0, gateway => 172.22.12.1, dns_primary => , dns_secondary => , from => 172.22.12.50, to => 172.22.12.255, boot_mode => DHCP, ipam => Internal DB, vlanid => , mtu => 1500, network_type => IPv4, description => , parameters => {type => vxlan, vxlan-id => 12122627}}
+

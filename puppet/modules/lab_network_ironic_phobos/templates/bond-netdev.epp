@@ -1,0 +1,10 @@
+[NetDev]
+Name=<%= $bond %>
+Kind=bond
+MTUBytes=9000
+
+[Bond]
+Mode=802.3ad
+MIIMonitorSec=1s
+UpDelaySec=10s
+DownDelaySec=10s

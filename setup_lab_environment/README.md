@@ -32,10 +32,13 @@ tracking.
 ### Set up an org, location and user
 
 Just to go through the process.  I'll create a new org and location to run things in.
+Make sure to add the default smart proxy or else you will have missing template vars
+such as puppermaster and puppet_ca_server.
 
 ```bash
 hammer organization create --label "lab_org" --name "Lab Organization"
-hammer location create --name "Lab Location"
+hammer proxy list
+hammer location create --name "Lab Location" --smart-proxy-ids 1
 ```
 
 Create a new user for the org
@@ -128,19 +131,20 @@ hammer domain set-parameter --domain "lab1.phobos.rpc.rackspace.com" --name "int
 
 ## Set up openstack lab project
 
+I attempted to set up a domain admin, but it needs higher privs than that.  We will just create an admin user
+and a separate project just for the labs.
+
 ```bash
-openstack domain create --description "Shared LAB Domain" --enable labs-domain
+
 
 openstack project create --description "Shared LAB Project" --domain labs-domain labs-project
 
-openstack user create --domain labs-domain --project labs-project --password-prompt --description 'LABS Domain Admin User' --enable labs-admin
+openstack user create --project labs-project --password-prompt --description 'LABS Domain Admin User' --enable labs-admin
 
-openstack role add --project labs-project --user-domain labs-domain --user labs-admin admin
-openstack role add --domain labs-domain --user-domain labs-domain --user labs-admin admin
+openstack role add --project labs-project --user labs-admin admin
+openstack role add --domain default --user labs-admin admin
 
 openstack quota set --ram='-1' --instances=100 --cores='-1' --floating-ips=1 --gigabytes='-1' labs-project
-
-openstack project list --domain labs-domain
 
 neutron security-group-list --tenant_id <project id>
 

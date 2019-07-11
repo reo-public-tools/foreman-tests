@@ -1,0 +1,13 @@
+[Match]
+Name=<%= $bond %>
+
+[Network]
+Bridge=br-vlan
+<% $foreman_subnets.each |$cursubnet| { -%>
+  <%- if $cursubnet['parameters']['type'] == 'vxlan' { -%>
+VXLAN=<%= $bond %>.vxlan<%= $cursubnet['parameters']['vxlan-id'] %>
+  <%- } elsif $cursubnet['vlanid'] { -%>
+VLAN=<%= $bond %>.<%= $cursubnet['vlanid'] %>
+  <%- } -%>
+<%- } -%>
+

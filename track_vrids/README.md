@@ -30,7 +30,7 @@ Domain: lab2.phobos.rpc.rackspace.com(LAB2 Dynamic Domain)
 		name: internal_floating_ip value: 172.22.0.10
 		name: internal_vrid value: 5
 		name: in-use value: yes
-		name: multicast-group value: 239.1.33.205
+		name: multicast_group value: 239.1.33.205
 		name: type value: vxlan
 	Subnets:
 		name: LAB2-MGMT

@@ -348,7 +348,7 @@ class foremanAction:
                     if (parameter['name'] == 'type'
                             and parameter['value'] != 'vxlan'):
                         continue
-                    if parameter['name'] == 'multicast-group':
+                    if parameter['name'] == 'multicast_group':
                         if parameter['value'] == mcgroup:
                             free_for_use = 0
 
@@ -406,7 +406,7 @@ class foremanAction:
                 'domain_parameters_attributes': [
                     {'name': 'type', 'value': 'vxlan'},
                     {'name': 'in-use', 'value': 'yes'},
-                    {'name': 'multicast-group', 'value': multicast_group},
+                    {'name': 'multicast_group', 'value': multicast_group},
                     {'name': 'external_vrid', 'value': external_vrid},
                     {'name': 'internal_vrid', 'value': internal_vrid}
                 ],

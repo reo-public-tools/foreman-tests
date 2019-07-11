@@ -1,0 +1,306 @@
+---
+parameters:
+  kt_env: 
+  kt_cv: 
+  foreman_host_collections: []
+  lifecycle_environment: 
+  content_view: 
+  content_view_info: {}
+  foreman_subnets:
+  - name: LAB2-LBAAS
+    network: 172.22.16.0
+    mask: 255.255.252.0
+    gateway: 172.22.16.1
+    dns_primary: 
+    dns_secondary: 
+    from: 172.22.16.50
+    to: 172.22.16.255
+    boot_mode: DHCP
+    ipam: Internal DB
+    vlanid: 
+    mtu: 1500
+    network_type: IPv4
+    description: 
+    parameters:
+      type: vxlan
+      vxlan-id: '12122628'
+  - name: LAB2-MGMT
+    network: 172.22.0.0
+    mask: 255.255.252.0
+    gateway: 172.22.0.1
+    dns_primary: 
+    dns_secondary: 
+    from: 172.22.0.50
+    to: 172.22.0.255
+    boot_mode: DHCP
+    ipam: Internal DB
+    vlanid: 
+    mtu: 1500
+    network_type: IPv4
+    description: 
+    parameters:
+      type: vxlan
+      vxlan-id: '12122624'
+  - name: LAB2-STORAGE
+    network: 172.22.8.0
+    mask: 255.255.252.0
+    gateway: 172.22.8.1
+    dns_primary: 
+    dns_secondary: 
+    from: 172.22.8.50
+    to: 172.22.8.255
+    boot_mode: DHCP
+    ipam: Internal DB
+    vlanid: 
+    mtu: 1500
+    network_type: IPv4
+    description: 
+    parameters:
+      type: vxlan
+      vxlan-id: '12122626'
+  - name: LAB2-TENANT
+    network: 172.22.12.0
+    mask: 255.255.252.0
+    gateway: 172.22.12.1
+    dns_primary: 
+    dns_secondary: 
+    from: 172.22.12.50
+    to: 172.22.12.255
+    boot_mode: DHCP
+    ipam: Internal DB
+    vlanid: 
+    mtu: 1500
+    network_type: IPv4
+    description: 
+    parameters:
+      type: vxlan
+      vxlan-id: '12122627'
+  foreman_interfaces:
+  - ip: 
+    ip6: 
+    mac: 9c:dc:71:d6:c0:e8
+    name: 
+    attrs:
+      dhcp: 172.20.41.2
+      mtu: 9000
+    virtual: true
+    link: true
+    identifier: bond0
+    managed: false
+    primary: false
+    provision: false
+    subnet: 
+    subnet6: 
+    tag: ''
+    attached_to: ''
+    type: Bond
+    attached_devices: ''
+    mode: balance-rr
+    bond_options: ''
+  - ip: 172.22.16.50
+    ip6: ''
+    mac: 
+    name: ''
+    attrs: {}
+    virtual: true
+    link: true
+    identifier: br-lbaas
+    managed: false
+    primary: false
+    provision: false
+    subnet:
+      name: LAB2-LBAAS
+      network: 172.22.16.0
+      mask: 255.255.252.0
+      gateway: 172.22.16.1
+      dns_primary: 
+      dns_secondary: 
+      from: 172.22.16.50
+      to: 172.22.16.255
+      boot_mode: DHCP
+      ipam: Internal DB
+      vlanid: 
+      mtu: 1500
+      network_type: IPv4
+      description: 
+    subnet6: 
+    tag: ''
+    attached_to: ''
+    type: Bridge
+    attached_devices: ''
+  - ip: 172.22.0.50
+    ip6: ''
+    mac: 
+    name: ''
+    attrs: {}
+    virtual: true
+    link: true
+    identifier: br-mgmt
+    managed: false
+    primary: false
+    provision: false
+    subnet:
+      name: LAB2-MGMT
+      network: 172.22.0.0
+      mask: 255.255.252.0
+      gateway: 172.22.0.1
+      dns_primary: 
+      dns_secondary: 
+      from: 172.22.0.50
+      to: 172.22.0.255
+      boot_mode: DHCP
+      ipam: Internal DB
+      vlanid: 
+      mtu: 1500
+      network_type: IPv4
+      description: 
+    subnet6: 
+    tag: ''
+    attached_to: ''
+    type: Bridge
+    attached_devices: ''
+  - ip: 172.22.8.50
+    ip6: ''
+    mac: 
+    name: ''
+    attrs: {}
+    virtual: true
+    link: true
+    identifier: br-storage
+    managed: false
+    primary: false
+    provision: false
+    subnet:
+      name: LAB2-STORAGE
+      network: 172.22.8.0
+      mask: 255.255.252.0
+      gateway: 172.22.8.1
+      dns_primary: 
+      dns_secondary: 
+      from: 172.22.8.50
+      to: 172.22.8.255
+      boot_mode: DHCP
+      ipam: Internal DB
+      vlanid: 
+      mtu: 1500
+      network_type: IPv4
+      description: 
+    subnet6: 
+    tag: ''
+    attached_to: ''
+    type: Bridge
+    attached_devices: ''
+  - ip: 172.20.41.31
+    ip6: ''
+    mac: 
+    name: shan5464-test3.lab2.phobos.rpc.rackspace.com
+    attrs: {}
+    virtual: false
+    link: true
+    identifier: br-vlan
+    managed: false
+    primary: true
+    provision: true
+    subnet: 
+    subnet6: 
+    tag: 
+    attached_to: 
+    type: Interface
+  - ip: 172.22.12.50
+    ip6: ''
+    mac: 
+    name: ''
+    attrs: {}
+    virtual: true
+    link: true
+    identifier: br-vxlan
+    managed: false
+    primary: false
+    provision: false
+    subnet:
+      name: LAB2-TENANT
+      network: 172.22.12.0
+      mask: 255.255.252.0
+      gateway: 172.22.12.1
+      dns_primary: 
+      dns_secondary: 
+      from: 172.22.12.50
+      to: 172.22.12.255
+      boot_mode: DHCP
+      ipam: Internal DB
+      vlanid: 
+      mtu: 1500
+      network_type: IPv4
+      description: 
+    subnet6: 
+    tag: ''
+    attached_to: ''
+    type: Bridge
+    attached_devices: ''
+  - ip: 
+    ip6: 
+    mac: 9c:dc:71:d6:c0:e8
+    name: ''
+    attrs:
+      mtu: 9000
+    virtual: false
+    link: true
+    identifier: em49
+    managed: false
+    primary: false
+    provision: false
+    subnet: 
+    subnet6: 
+    tag: 
+    attached_to: 
+    type: Interface
+  - ip: 
+    ip6: 
+    mac: 9c:dc:71:d6:c0:ec
+    name: ''
+    attrs:
+      mtu: 9000
+    virtual: false
+    link: true
+    identifier: em50
+    managed: false
+    primary: false
+    provision: false
+    subnet: 
+    subnet6: 
+    tag: 
+    attached_to: 
+    type: Interface
+  location: Lab Location
+  location_title: Lab Location
+  organization: Lab Organization
+  organization_title: Lab Organization
+  domainname: lab2.phobos.rpc.rackspace.com
+  foreman_domain_description: LAB2 Dynamic Domain
+  owner_name: Admin User
+  owner_email: root@localdomain
+  ssh_authorized_keys: []
+  foreman_users:
+    admin:
+      firstname: Admin
+      lastname: User
+      mail: root@localdomain
+      description: 
+      fullname: Admin User
+      name: admin
+      ssh_authorized_keys: []
+  root_pw: $5$0ip7P49WYwkxwUOI$dSOu.PztO5Sew9q6EN00fPdIRKvv/kP5B2ouowQkcr3
+  foreman_config_groups: []
+  puppetmaster: lab-deploy01.localdomain
+  puppet_ca: lab-deploy01.localdomain
+  foreman_env: compute_resource_phobos
+  external_vrid: '252'
+  internal_floating_ip: 172.22.0.10
+  internal_vrid: '245'
+  in-use: 'yes'
+  multicast-group: 239.1.33.186
+  type: vxlan
+classes:
+  lab_network_ironic_phobos: 
+  motd: 
+environment: compute_resource_phobos
