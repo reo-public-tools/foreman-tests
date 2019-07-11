@@ -32,7 +32,7 @@ Domain: lab2.phobos.rpc.rackspace.com(LAB2 Dynamic Domain)
 	Parameters:
 		name: internal_floating_ip value: 172.22.0.10
 		name: in-use value: yes
-		name: multicast-group value: 239.1.33.60
+		name: multicast_group value: 239.1.33.60
 		name: type value: vxlan
 
 [root@lab-deploy01 track_floaters]# ./delete_all_vxlan_domains.py 
@@ -95,7 +95,7 @@ Domain: lab2.phobos.rpc.rackspace.com(LAB2 Dynamic Domain)
 		name: external_floating_ip value: 172.20.41.108
 		name: internal_floating_ip value: 172.22.0.10
 		name: in-use value: yes
-		name: multicast-group value: 239.1.33.245
+		name: multicast_group value: 239.1.33.245
 		name: type value: vxlan
 
 

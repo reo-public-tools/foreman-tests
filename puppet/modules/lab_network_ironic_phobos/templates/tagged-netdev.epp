@@ -1,0 +1,7 @@
+[NetDev]
+Name=<%= $devname %>
+Kind=vxlan
+
+[<%= $type.upcase %>]
+VXLAN=<%= $tagid %>
+GROUP=<%= $mcgroup %>

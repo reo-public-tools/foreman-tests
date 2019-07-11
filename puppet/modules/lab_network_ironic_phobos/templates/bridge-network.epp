@@ -1,0 +1,12 @@
+[Match]
+Name = <%= $bridge %>
+
+[Network]
+ConfigureWithoutCarrier = yes
+<%- if $address and $cidr { -%>
+Address = <%= $address %>/<%= $cidr %>
+<%- } -%>
+<%- if $gw { -%>
+Gateway = <%= $gw %>
+<%- } -%>
+
