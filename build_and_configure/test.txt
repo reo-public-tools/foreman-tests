@@ -1,0 +1,17 @@
+
+
+# I can't remember what all has been do so far.  
+
+In 'Hosts' -> 'Operating Systems' -> Ubuntu Bionic It looks like templates are set to 'default-userdata'
+
+Lets clone it and make our own.
+
+'Hosts' -> 'Provisioning Templates' -> 'default-userdata' -> 'Clone'
+
+  -> Name: custom-baremetal-userdata
+  -> Association Tab: Move over all of them
+  -> Submit
+
+'Hosts' -> 'Operating Systems' -> (select os) -> 'Templates' -> User data template: custom-baremetal-userdata
+
+
